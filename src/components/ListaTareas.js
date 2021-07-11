@@ -1,21 +1,22 @@
-import React, { useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { reducer } from '../hooks/reducer'
 import { useForm } from '../hooks/useForm'
 
-const initialState = [
-    {
-        id: Date.now(),
-        tarea: "Jugar PS4",
-        done: false
-    }
-]
+const init = () => {
+return JSON.parse(localStorage.getItem("tareas")) || []
+}
+
+
 
 export const ListaTareas = () => {
 
-    const [tareas, dispatch] = useReducer(reducer, initialState)
+    const [tareas, dispatch] = useReducer(reducer, [], init)
     const [{descripcion}, cambioValores, reset] = useForm({
         descripcion: ''
     })
+    useEffect(() => {
+        localStorage.setItem("tareas", JSON.stringify(tareas) )
+    }, [tareas])
    
     
     const agregarTarea = (e) =>{
